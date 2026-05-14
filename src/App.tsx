@@ -3,13 +3,17 @@ import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import {
   ArrowRight,
   CalendarCheck,
+  Dumbbell,
   ChevronLeft,
   ChevronRight,
+  GraduationCap,
   Mail,
   MapPin,
   Menu,
   Phone,
   Quote,
+  ShieldCheck,
+  Sparkles,
   X,
 } from "lucide-react";
 import { siteContent } from "./content/siteContent";
@@ -27,6 +31,75 @@ const navItems = [
   { label: "Testimonials", path: "/testimonials" },
   { label: "Contact", path: "/contact" },
 ];
+
+const experienceGroups = [
+  {
+    id: "teams",
+    label: "Teams",
+    icon: ShieldCheck,
+    items: [
+      { date: "2015-2018", client: "Oakland Raiders", detail: "Soft Tissue Specialist" },
+      { date: "2018", client: "World Cup Rugby Team" },
+      { date: "2007-2009", client: "Nor Cal Volleyball Assoc" },
+    ],
+  },
+  {
+    id: "sport",
+    label: "Sport",
+    icon: Dumbbell,
+    items: [{ date: "2010-2016", client: "Reebok/CrossFit Games", detail: "Lead bodyworker; Most Fittest on Earth competition" }],
+  },
+  {
+    id: "methods",
+    label: "Methods",
+    icon: Sparkles,
+    items: [
+      { date: "2018-present", client: "Proprioceptive Deep Tendon Reflex", detail: "P-DTR" },
+      { date: "2014-present", client: "Active Release Techniques", detail: "ART full body certified" },
+      { date: "2015-present", client: "Neurokinetic Therapy", detail: "Advanced muscle testing" },
+      { date: "2014", client: "Rock Tape", detail: "Facial Movement Taping (FMT)" },
+      { date: "15+ years", client: "Lomilomi Massage", detail: "500+ hours of training in Maui, Hawaii" },
+    ],
+  },
+  {
+    id: "education",
+    label: "Education",
+    icon: GraduationCap,
+    items: [
+      { date: "2008", client: "OMERI Institute", detail: "Orthopedic Massage Certification" },
+      { date: "2009-current", client: "NCBTMB", detail: "Continuing Education Instructor" },
+      { date: "2009", client: "Tom Meyers", detail: "Anatomy Trains" },
+      { date: "Since 2001", client: "Ahhh Massage", detail: "Founder" },
+    ],
+  },
+];
+
+const galleryAlbums = [
+  {
+    id: "raiders",
+    title: "Oakland Raiders",
+    description: "Soft tissue work with Raiders athletes from the original gallery.",
+    images: siteContent.gallery.filter((item) => item.title.includes("Raiders") || item.title.includes("Cordarrell")),
+  },
+  {
+    id: "crossfit",
+    title: "CrossFit",
+    description: "CrossFit Games and competitive athlete bodywork moments.",
+    images: siteContent.gallery.filter((item) => item.title.includes("CrossFit") || item.title.includes("Rich Froning")),
+  },
+  {
+    id: "ed-work",
+    title: "Ed at Work",
+    description: "Treatment-room images and hands-on manual therapy work.",
+    images: siteContent.gallery.filter((item) => item.title === "Ed").slice(0, 4),
+  },
+  {
+    id: "client-sessions",
+    title: "Client Sessions",
+    description: "Additional client and field-session photos migrated from WordPress.",
+    images: siteContent.gallery.filter((item) => item.title === "Ed").slice(4),
+  },
+].filter((album) => album.images.length > 0);
 
 function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -253,24 +326,85 @@ function ModalitiesPage() {
 }
 
 function MeetEdPage() {
+  const [activeGroup, setActiveGroup] = useState(experienceGroups[0].id);
+  const group = experienceGroups.find((item) => item.id === activeGroup) ?? experienceGroups[0];
+  const activeCount = group.items.length;
+  const totalCount = experienceGroups.reduce((sum, item) => sum + item.items.length, 0);
+  const Icon = group.icon;
+
   return (
     <PageFrame eyebrow="Meet Ed" title="Training, teams, and clinical background">
       <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-        <img
-          src={assetPath(siteContent.bio.image)}
-          alt="Ed from NeuroBodyWork"
-          className="reveal-card aspect-[4/5] w-full rounded-lg object-cover shadow-quiet"
-        />
-        <div className="grid gap-3 sm:grid-cols-2">
-          {siteContent.bio.credentials.map((credential, index) => (
-            <div
-              key={credential}
-              className="reveal-card rounded-lg border border-border bg-card p-4 text-sm leading-6"
-              style={{ animationDelay: `${index * 45}ms` }}
-            >
-              {credential}
+        <div className="reveal-card overflow-hidden rounded-lg border border-border bg-card shadow-quiet">
+          <img src={assetPath(siteContent.bio.image)} alt="Ed from NeuroBodyWork" className="aspect-[4/5] w-full object-cover" />
+          <div className="grid grid-cols-2 border-t border-border bg-secondary/45">
+            <div className="border-r border-border p-4">
+              <p className="text-2xl font-bold text-primary">25+</p>
+              <p className="mt-1 text-xs font-semibold uppercase text-muted-foreground">Years hands-on</p>
             </div>
-          ))}
+            <div className="p-4">
+              <p className="text-2xl font-bold text-primary">{totalCount}</p>
+              <p className="mt-1 text-xs font-semibold uppercase text-muted-foreground">Experience notes</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          <div className="experience-tabs reveal-card" role="tablist" aria-label="Experience categories">
+            {experienceGroups.map((item) => {
+              const TabIcon = item.icon;
+              const active = item.id === activeGroup;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  className={cn("experience-tab", active && "experience-tab-active")}
+                  onClick={() => setActiveGroup(item.id)}
+                >
+                  <TabIcon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                  <span className="experience-count">{item.items.length}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="experience-panel reveal-card" key={group.id}>
+            <div className="flex flex-col gap-4 border-b border-border pb-5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3">
+                <span className="experience-panel-icon">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <div>
+                  <h3 className="font-display text-2xl font-bold">{group.label}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {activeCount} selected from {totalCount} extracted credentials
+                  </p>
+                </div>
+              </div>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/contact">Discuss fit</Link>
+              </Button>
+            </div>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              {group.items.map((credential, index) => (
+                <span key={`${credential.client}-${credential.date}`} className="experience-pill" style={{ animationDelay: `${index * 55}ms` }}>
+                  <span className="experience-date">{credential.date}</span>
+                  <span className="experience-main">
+                    <span className="experience-client">{credential.client}</span>
+                    {credential.detail ? <span className="experience-detail">{credential.detail}</span> : null}
+                  </span>
+                </span>
+              ))}
+            </div>
+
+            <p className="mt-6 text-xs font-semibold uppercase text-muted-foreground">
+              Showing {activeCount} of {totalCount} extracted credentials
+            </p>
+          </div>
         </div>
       </div>
     </PageFrame>
@@ -278,67 +412,89 @@ function MeetEdPage() {
 }
 
 function GalleryPage() {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const selected = selectedIndex === null ? null : siteContent.gallery[selectedIndex];
+  return (
+    <PageFrame eyebrow="Gallery" title="Albums with focused photo sliders">
+      <div className="grid gap-6 xl:grid-cols-2">
+        {galleryAlbums.map((album, index) => (
+          <GalleryAlbum key={album.id} album={album} delay={index * 90} />
+        ))}
+      </div>
+    </PageFrame>
+  );
+}
+
+type GalleryAlbumData = (typeof galleryAlbums)[number];
+
+function GalleryAlbum({ album, delay }: { album: GalleryAlbumData; delay: number }) {
+  const [index, setIndex] = useState(0);
+  const active = album.images[index];
+  const hasMultiple = album.images.length > 1;
 
   const move = (direction: -1 | 1) => {
-    setSelectedIndex((current) => {
-      if (current === null) return 0;
-      return (current + direction + siteContent.gallery.length) % siteContent.gallery.length;
-    });
+    setIndex((current) => (current + direction + album.images.length) % album.images.length);
   };
 
   return (
-    <PageFrame eyebrow="Gallery" title="Original WordPress media, rebuilt as static assets">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {siteContent.gallery.map((item, index) => (
-          <button
-            key={`${item.title}-${item.image}`}
-            type="button"
-            className="gallery-tile reveal-card group text-left"
-            style={{ animationDelay: `${index * 35}ms` }}
-            onClick={() => setSelectedIndex(index)}
-          >
-            <img src={assetPath(item.image)} alt="" className="aspect-[4/3] w-full object-cover" loading="lazy" />
-            <span className="gallery-overlay">
-              <span className="text-sm font-semibold">{item.title}</span>
-              <span className="mt-2 flex items-center gap-2 text-xs uppercase">View image <ArrowRight className="h-3 w-3" /></span>
-            </span>
-          </button>
-        ))}
+    <section className="album-frame reveal-card" style={{ animationDelay: `${delay}ms` }}>
+      <div className="album-image-shell">
+        <img key={active.image} src={assetPath(active.image)} alt={active.title} className="album-image" loading="lazy" />
+        <div className="album-image-gradient" />
+        <div className="album-counter">
+          {index + 1} / {album.images.length}
+        </div>
+        {hasMultiple ? (
+          <>
+            <Button variant="secondary" size="icon" aria-label={`Previous ${album.title} photo`} className="album-arrow left-3" onClick={() => move(-1)}>
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <Button variant="secondary" size="icon" aria-label={`Next ${album.title} photo`} className="album-arrow right-3" onClick={() => move(1)}>
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+          </>
+        ) : null}
       </div>
 
-      {selected && selectedIndex !== null ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 lightbox-enter">
-          <button className="absolute inset-0" aria-label="Close gallery image" onClick={() => setSelectedIndex(null)} />
-          <div className="relative z-10 w-full max-w-5xl">
-            <img
-              src={assetPath(selected.image)}
-              alt={selected.title}
-              className="max-h-[78vh] w-full rounded-lg object-contain shadow-quiet"
-            />
-            <div className="mt-4 flex items-center justify-between gap-3 text-white">
-              <Button variant="secondary" size="icon" aria-label="Previous image" onClick={() => move(-1)}>
-                <ChevronLeft className="h-5 w-5" />
-              </Button>
-              <p className="text-center text-sm font-semibold">{selected.title}</p>
-              <Button variant="secondary" size="icon" aria-label="Next image" onClick={() => move(1)}>
-                <ChevronRight className="h-5 w-5" />
-              </Button>
-            </div>
-            <Button
-              variant="secondary"
-              size="icon"
-              aria-label="Close lightbox"
-              className="absolute right-3 top-3"
-              onClick={() => setSelectedIndex(null)}
-            >
-              <X className="h-5 w-5" />
-            </Button>
+      <div className="album-body">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h3 className="font-display text-2xl font-bold">{album.title}</h3>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">{album.description}</p>
+          </div>
+          <span className="album-badge">{album.images.length} photos</span>
+        </div>
+
+        <div className="mt-5 flex items-center justify-between gap-4">
+          <p className="min-w-0 truncate text-sm font-semibold text-primary">{active.title}</p>
+          <div className="flex gap-2">
+            {album.images.map((item, dotIndex) => (
+              <button
+                key={item.image}
+                type="button"
+                aria-label={`Show ${item.title}`}
+                className={cn("album-dot", dotIndex === index && "album-dot-active")}
+                onClick={() => setIndex(dotIndex)}
+              />
+            ))}
           </div>
         </div>
-      ) : null}
-    </PageFrame>
+
+        {hasMultiple ? (
+          <div className="mt-4 grid grid-cols-4 gap-2">
+            {album.images.map((item, thumbIndex) => (
+              <button
+                key={item.image}
+                type="button"
+                aria-label={`Select ${item.title}`}
+                className={cn("album-thumb", thumbIndex === index && "album-thumb-active")}
+                onClick={() => setIndex(thumbIndex)}
+              >
+                <img src={assetPath(item.image)} alt="" loading="lazy" />
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </section>
   );
 }
 

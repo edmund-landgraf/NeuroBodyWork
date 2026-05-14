@@ -46,20 +46,106 @@
     @apply rounded-lg border border-border bg-card p-5 transition duration-300 hover:-translate-y-1 hover:shadow-quiet;
   }
 
-  .gallery-tile {
-    @apply relative overflow-hidden rounded-lg border border-border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-quiet;
+  .album-frame {
+    @apply overflow-hidden rounded-lg border border-border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-quiet;
   }
 
-  .gallery-tile img {
-    @apply transition duration-500;
+  .album-image-shell {
+    @apply relative overflow-hidden bg-slate-950;
   }
 
-  .gallery-tile:hover img {
-    transform: scale(1.06);
+  .album-image {
+    @apply aspect-[4/3] w-full object-cover;
+    animation: albumImageIn 360ms ease both;
   }
 
-  .gallery-overlay {
-    @apply absolute inset-0 flex translate-y-3 flex-col justify-end bg-primary/70 p-5 text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100;
+  .album-image-gradient {
+    @apply pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950/60 to-transparent;
+  }
+
+  .album-counter {
+    @apply absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-slate-950 shadow-sm;
+  }
+
+  .album-arrow {
+    @apply absolute top-1/2 -translate-y-1/2 bg-white/90 text-slate-950 shadow-sm hover:bg-white;
+  }
+
+  .album-body {
+    @apply p-5;
+  }
+
+  .album-badge {
+    @apply inline-flex w-fit shrink-0 rounded-full bg-secondary px-3 py-1 text-xs font-bold uppercase text-primary;
+  }
+
+  .album-dot {
+    @apply h-2.5 w-2.5 rounded-full bg-primary/25 transition duration-300 hover:bg-primary/60;
+  }
+
+  .album-dot-active {
+    @apply w-7 bg-primary;
+  }
+
+  .album-thumb {
+    @apply overflow-hidden rounded-md border-2 border-transparent opacity-65 transition duration-300 hover:opacity-100;
+  }
+
+  .album-thumb img {
+    @apply aspect-square w-full object-cover;
+  }
+
+  .album-thumb-active {
+    @apply border-primary opacity-100 shadow-sm;
+  }
+
+  .experience-tabs {
+    @apply grid gap-2 rounded-lg border border-border bg-secondary/55 p-2 sm:grid-cols-2 xl:grid-cols-4;
+  }
+
+  .experience-tab {
+    @apply flex h-12 items-center justify-center gap-2 rounded-md border border-transparent px-3 text-sm font-bold text-muted-foreground transition duration-300 hover:border-primary/30 hover:bg-background hover:text-foreground;
+  }
+
+  .experience-tab-active {
+    @apply border-primary/35 bg-background text-primary shadow-sm;
+  }
+
+  .experience-count {
+    @apply inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-muted px-1.5 text-xs text-muted-foreground;
+  }
+
+  .experience-tab-active .experience-count {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .experience-panel {
+    @apply rounded-lg border border-border bg-card p-5 shadow-sm sm:p-6;
+  }
+
+  .experience-panel-icon {
+    @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground;
+  }
+
+  .experience-pill {
+    @apply grid w-full grid-cols-[7.5rem_1fr] items-start gap-3 rounded-lg border border-primary/25 bg-primary/10 p-3 text-left shadow-sm sm:w-[min(100%,21rem)];
+    animation: pillIn 360ms ease both;
+  }
+
+  .experience-date {
+    @apply inline-flex h-7 w-full items-center justify-center rounded-full bg-primary px-2 text-center text-[0.72rem] font-bold uppercase text-primary-foreground;
+  }
+
+  .experience-main {
+    @apply grid min-w-0 gap-1 pt-0.5;
+  }
+
+  .experience-client {
+    @apply text-sm font-bold leading-5 text-foreground;
+  }
+
+  .experience-detail {
+    @apply text-xs font-semibold leading-5 text-muted-foreground;
   }
 
   .testimonial-stage {
@@ -151,6 +237,28 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes pillIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes albumImageIn {
+  from {
+    opacity: 0;
+    transform: scale(1.025);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
