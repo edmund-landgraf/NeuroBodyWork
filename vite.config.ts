@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   publicDir: "transfer",
   server: {
-    port: 5173,
+    port: 5180,
     strictPort: false,
   },
 });
