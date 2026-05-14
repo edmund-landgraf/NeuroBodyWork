@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Inter:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 205 24% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 205 24% 13%;
+    --primary: 198 28% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 189 31% 93%;
+    --secondary-foreground: 203 26% 18%;
+    --muted: 204 20% 94%;
+    --muted-foreground: 202 13% 39%;
+    --accent: 37 56% 86%;
+    --accent-foreground: 203 26% 18%;
+    --border: 198 22% 84%;
+    --input: 198 22% 84%;
+    --ring: 198 28% 42%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer components {
+  .section {
+    @apply py-16 sm:py-20;
+  }
+}
